@@ -16,9 +16,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() === false) {
             $data['title'] = 'Codeigniter Gado | Login';
-            $this->load->view('templates/header', $data);
-            $this->load->view('auth/login');
-            $this->load->view('templates/footer');
+            $this->load_views('auth/login', $data);
         } else {
             // echo 'login successful';
             $this->_login();
@@ -43,9 +41,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Codeigniter Gado | Register';
-            $this->load->view('templates/header', $data);
-            $this->load->view('auth/register');
-            $this->load->view('templates/footer');
+            $this->load_views('auth/register', $data);
         } else {
             $data = [
                 'name' => htmlspecialchars($this->input->post('name')),
@@ -61,6 +57,16 @@ class Auth extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Register was success. Please login.</div>');
             redirect('auth/login');
         }
+    }
+
+    public function logout()
+    {
+        $this->session->unset_userdata('email');
+        $this->session->unset_userdata('role_id');
+        $this->session->unset_userdata('name');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out.</div>');
+        redirect('auth/login');
     }
 
     private function _login()
@@ -97,13 +103,10 @@ class Auth extends CI_Controller
         }
     }
 
-    public function logout()
+    private function load_views($content_template, $data = [])
     {
-        $this->session->unset_userdata('email');
-        $this->session->unset_userdata('role_id');
-        $this->session->unset_userdata('name');
-
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out.</div>');
-        redirect('auth/login');
+        $this->load->view('templates/header', $data);
+        $this->load->view($content_template);
+        $this->load->view('templates/footer');
     }
 }
