@@ -6,41 +6,7 @@ class Auth extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-
         $this->load->library('form_validation');
-    }
-
-    private function _login()
-    {
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
-
-        $user = $this->db->get_where('users', ['email' => $email])->row_array();
-        // var_dump($user);die;
-
-        if ($user) {
-            if ((int) $user['is_active'] === 1) {
-                if (password_verify($password, $user['password'])) {
-                    $data = [
-                        'email' => $user['email'],
-                        'role_id' => $user['role_id'],
-                    ];
-
-                    $this->session->set_userdata($data);
-
-                    redirect('user');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password not correct.</div>');
-                    redirect('auth/login');
-                }
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">User not active.</div>');
-                redirect('auth/login');
-            }
-        } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email not found.</div>');
-            redirect('auth/login');
-        }
     }
 
     public function login()
@@ -93,6 +59,40 @@ class Auth extends CI_Controller
 
             $this->db->insert('users', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Register was success. Please login.</div>');
+            redirect('auth/login');
+        }
+    }
+
+    private function _login()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        $user = $this->db->get_where('users', ['email' => $email])->row_array();
+        // var_dump($user);die;
+
+        if ($user) {
+            if ((int) $user['is_active'] === 1) {
+                if (password_verify($password, $user['password'])) {
+                    $data = [
+                        'email' => $user['email'],
+                        'name' => $user['name'],
+                        'role_id' => $user['role_id'],
+                    ];
+
+                    $this->session->set_userdata($data);
+
+                    redirect('user');
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password not correct.</div>');
+                    redirect('auth/login');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">User not active.</div>');
+                redirect('auth/login');
+            }
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email not found.</div>');
             redirect('auth/login');
         }
     }
