@@ -16,9 +16,9 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() === false) {
             $data['title'] = 'Codeigniter Gado | Login';
-            $this->load->view('templates/auth_header', $data);
+            $this->load->view('templates/header', $data);
             $this->load->view('auth/login');
-            $this->load->view('templates/auth_footer');
+            $this->load->view('templates/footer');
         } else {
             // echo 'login successful';
             $this->_login();
@@ -43,14 +43,14 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Codeigniter Gado | Register';
-            $this->load->view('templates/auth_header', $data);
+            $this->load->view('templates/header', $data);
             $this->load->view('auth/register');
-            $this->load->view('templates/auth_footer');
+            $this->load->view('templates/footer');
         } else {
             $data = [
                 'name' => htmlspecialchars($this->input->post('name')),
                 'email' => htmlspecialchars($this->input->post('email')),
-                'image' => 'default.jpg',
+                'image' => 'default.png',
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'role_id' => 2, // member
                 'is_active' => 1,

@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container vh-100">
 
     <!-- Outer Row -->
-    <div class="row justify-content-center">
+    <div class="row h-100 d-flex justify-content-center align-items-center">
 
         <div class="col-lg-6">
 
