@@ -14,7 +14,9 @@ class User extends CI_Controller
         $data['title'] = 'Codeigniter Gado | Dashboard';
 
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/pre-content');
         $this->load->view('user/index');
+        $this->load->view('templates/post-content');
         $this->load->view('templates/footer');
     }
 }
