@@ -11,17 +11,21 @@
                         </div>
                         <form class="user" method="POST" action="<?= base_url('auth/register') ?>">
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="name" id="exampleInputName" placeholder="Full Name">
+                                <input type="text" class="form-control form-control-user" name="name" value="<?= set_value('name'); ?>" id="exampleInputName" placeholder="Full Name">
+                                <?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?>
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-user" name="email" id="exampleInputEmail" placeholder="Email Address">
+                                <input type="email" class="form-control form-control-user" name="email" value="<?= set_value('email'); ?>" id="exampleInputEmail" placeholder="Email Address">
+                                <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="password" class="form-control form-control-user" name="password" id="exampleInputPassword" placeholder="Password">
+                                    <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="password" class="form-control form-control-user" name="password_confirm" id="exampleRepeatPassword" placeholder="Repeat Password">
+                                    <?= form_error('password_confirm', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary btn-user btn-block">
