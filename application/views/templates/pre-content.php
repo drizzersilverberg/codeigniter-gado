@@ -15,44 +15,52 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Administrator
-        </div>
+        <!-- Query Menu -->
+        <?php
+        $role_id = $this->session->userdata('role_id');
+        $queryMenu = "
+                        SELECT `menu`.`id` , `menu`
+                        FROM `menu` 
+                        JOIN `access_menu` ON `menu`.`id` = `access_menu`.`menu_id`
+                        WHERE `access_menu`.`role_id` = $role_id
+                        ORDER BY `access_menu`.`menu_id` ASC
+                    ";
+        $menu = $this->db->query($queryMenu)->result_array();
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
+        ?>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Member
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-user"></i>
-                <span>My Profile</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" href="buttons.html">Buttons</a>
-                    <a class="collapse-item" href="cards.html">Cards</a>
-                </div>
+        <?php foreach ($menu as $m) : ?>
+            <div class="sidebar-heading">
+                <?= $m['menu']; ?>
             </div>
-        </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+            <?php
+            $menuId = $m['id'];
+            $querySubmenu = "
+                    SELECT *
+                    FROM `sub_menu`
+                    JOIN `menu` ON `sub_menu`.`menu_id` = `menu`.`id`
+                    WHERE `sub_menu`.`menu_id` = $menuId
+                    AND `sub_menu`.`is_active` = 1
+                ";
+
+            $subMenu = $this->db->query($querySubmenu)->result_array();
+            ?>
+
+            <?php foreach ($subMenu as $sm) : ?>
+                <li class="nav-item">
+                    <a href="<?= base_url($sm['url']); ?>" class="nav-link">
+                        <i class="<?= $sm['icon']; ?>"></i>
+                        <span><?= $sm['title']; ?></span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+        <?php endforeach; ?>
+
 
         <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
