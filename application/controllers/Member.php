@@ -10,17 +10,10 @@ class Member extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
-        $data['title'] = 'Codeigniter Gado | Member Dashboard';
-        $this->load_views('member/index', $data);
-    }
+        if (!is_authenticated()) redirect('auth/login');
 
-    private function load_views($content_template, $data = [])
-    {
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/pre-content');
-        $this->load->view($content_template);
-        $this->load->view('templates/post-content');
-        $this->load->view('templates/footer');
+        $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
+        $data['title'] = 'My Profile';
+        load_admin_views('member/index', $data);
     }
 }

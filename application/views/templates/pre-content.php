@@ -45,10 +45,13 @@
                 ";
 
             $subMenu = $this->db->query($querySubmenu)->result_array();
+
+            // var_dump($subMenu);
+            // die;
             ?>
 
             <?php foreach ($subMenu as $sm) : ?>
-                <li class="nav-item">
+                <li class="nav-item <?php if ($sm['title'] == $title) echo 'active'; ?>">
                     <a href="<?= base_url($sm['url']); ?>" class="nav-link">
                         <i class="<?= $sm['icon']; ?>"></i>
                         <span><?= $sm['title']; ?></span>

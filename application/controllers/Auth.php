@@ -11,12 +11,14 @@ class Auth extends CI_Controller
 
     public function login()
     {
+        if (is_authenticated()) role_redirect();
+
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
 
         if ($this->form_validation->run() === false) {
-            $data['title'] = 'Codeigniter Gado | Login';
-            $this->load_views('auth/login', $data);
+            $data['title'] = 'Login';
+            load_views('auth/login', $data);
         } else {
             // echo 'login successful';
             $this->_login();
@@ -25,6 +27,8 @@ class Auth extends CI_Controller
 
     public function register()
     {
+        if (is_authenticated()) role_redirect();
+
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]|matches[password_confirm]', [
@@ -40,8 +44,8 @@ class Auth extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $data['title'] = 'Codeigniter Gado | Register';
-            $this->load_views('auth/register', $data);
+            $data['title'] = 'Register';
+            load_views('auth/register', $data);
         } else {
             $data = [
                 'name' => htmlspecialchars($this->input->post('name')),
@@ -88,11 +92,7 @@ class Auth extends CI_Controller
 
                     $this->session->set_userdata($data);
 
-                    if ((int) $data['role_id'] === 1) {
-                        redirect('admin');
-                    } else {
-                        redirect('member');
-                    }
+                    role_redirect();
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password not correct.</div>');
                     redirect('auth/login');
@@ -105,12 +105,5 @@ class Auth extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email not found.</div>');
             redirect('auth/login');
         }
-    }
-
-    private function load_views($content_template, $data = [])
-    {
-        $this->load->view('templates/header', $data);
-        $this->load->view($content_template);
-        $this->load->view('templates/footer');
     }
 }
